@@ -1,7 +1,7 @@
 import React from 'react'
 
 const App: React.FC = () => {
-  console.log('deneme')
+  console.log('deneme 2')
   return <div>Ana component</div>
 }
 
