@@ -35,7 +35,7 @@
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
-      "yarn validate"
+      "yarn run validate"
     ]
   },
   "eslintConfig": {
