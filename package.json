@@ -30,10 +30,8 @@
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
-      "yarn lint",
       "yarn validate"
-    ],
-    "*.{ts,tsx,js}": "eslint --cache --fix"
+    ]
   },
   "eslintConfig": {
     "extends": [
