@@ -25,8 +25,13 @@
     "format:check": "prettier . --check",
     "format:fix": "prettier . --write",
     "lint": "eslint . --ext ts --ext tsx --ext js",
-    "validate": "run-p lint type:check format:check format:fix ",
+    "validate": "run-p lint type:check  format:fix format:check",
     "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
