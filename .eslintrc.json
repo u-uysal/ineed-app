@@ -23,7 +23,6 @@
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "no-use-before-define": "off",
-    "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-use-before-define": "error",
     "no-unused-vars": "error",
     "import/no-extraneous-dependencies": [
@@ -38,7 +37,11 @@
         "extensions": [".tsx"]
       }
     ],
-    "no-console": ["error"]
+    "react/no-danger": "off", // it's self explainatory that no-danger should be used sparingly
+    "react/react-in-jsx-scope": "off", // next.js does not require react in most components
+    "react/prop-types": "off", // as long as TS strict mode is off this is not required
+    "no-console": "error", // no console statements allowed
+    "prettier/prettier": "off" // don't show prettier errors as it will be fixed when saved anyway
   },
   "settings": {
     "import/resolver": {
