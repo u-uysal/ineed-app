@@ -25,19 +25,15 @@
     "format:check": "prettier . --check",
     "format:fix": "prettier . --write",
     "lint": "eslint . --ext ts --ext tsx --ext js",
-    "validate": "run-p lint type:check format:check format:fix "
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check"
-    }
+    "validate": "run-p lint type:check format:check format:fix ",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
       "yarn lint",
       "yarn validate"
-    ]
+    ],
+    "*.{ts,tsx,js}": "eslint --cache --fix"
   },
   "eslintConfig": {
     "extends": [
