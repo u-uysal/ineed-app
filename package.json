@@ -29,7 +29,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "validate",
+      "pre-commit": "lint-staged",
       "pre-push": "yarn run type-check"
     }
   },
