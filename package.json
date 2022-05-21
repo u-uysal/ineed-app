@@ -24,7 +24,7 @@
     "type:check": "tsc",
     "format:check": "prettier . --check",
     "format:fix": "prettier . --write",
-    "lint": "eslint --ext .tsx,.ts .",
+    "lint": "eslint . --ext ts --ext tsx --ext js",
     "validate": "run-p lint type:check format:check format:fix "
   },
   "husky": {
@@ -35,8 +35,8 @@
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
-      "yarn validate",
-      "yarn format:fix"
+      "yarn lint",
+      "yarn validate"
     ]
   },
   "eslintConfig": {
