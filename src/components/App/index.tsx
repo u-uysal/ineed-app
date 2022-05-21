@@ -1,8 +1,6 @@
 import React from 'react'
 
-const App: React.FC = () => {
-  console.log('deneme 2')
-  console.log('deneme 3')
+function App() {
   return <div>Ana component</div>
 }
 
