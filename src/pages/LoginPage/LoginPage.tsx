@@ -14,6 +14,8 @@ import { Form, Formik } from 'formik'
 import FormInput from 'src/components/form-fields/FormInput'
 import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
+import { useState } from "react";
+
 
 export default function LoginPage() {
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
@@ -30,6 +32,12 @@ export default function LoginPage() {
     // eslint-disable-next-line no-unused-vars
     const randomData = input
   }
+
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+
 
   return (
     <Formik
@@ -69,10 +77,9 @@ export default function LoginPage() {
                   <FormInput
                     name='password'
                     label='Password'
-                    placeholder='Password'
-                    // show password
-                    // TODO SERVET
-                    type='password'
+                    placeholder='Password'                    
+                    type={passwordShown ? "password" : "text"}
+                    onClick={togglePassword}
                   />
                   <Stack spacing={10}>
                     <Stack
