@@ -74,7 +74,7 @@ export default function LoginPage() {
                     // TODO SERVET
                     type='password'
                   />
-                  <Stack spacing={10}>
+                  <Stack spacing={5}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
                       align='start'
@@ -91,12 +91,15 @@ export default function LoginPage() {
                     >
                       Sign In
                     </Button>
-                    {/* TODO
-                    
-                    Eger kullanicinin hic hesabi yoksa register page'e yonlendir.
-                    
-                    
-                    */}
+                    <Button
+                      bg='green.400'
+                      color='white'
+                      _hover={{
+                        bg: 'green.500',
+                      }}
+                    >
+                      Create  new account
+                    </Button>
                   </Stack>
                 </Stack>
               </Box>
