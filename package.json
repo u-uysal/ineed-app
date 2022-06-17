@@ -19,6 +19,7 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "@types/react-router-dom": "^5.3.3",
+    "@types/yup": "^0.29.14",
     "formik": "^2.2.9",
     "framer-motion": "^6.3.3",
     "graphql": "^16.5.0",
