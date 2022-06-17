@@ -74,7 +74,7 @@ export default function LoginPage() {
                     // TODO SERVET
                     type='password'
                   />
-                  <Stack spacing={5}>
+                  <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
                       align='start'
@@ -98,7 +98,7 @@ export default function LoginPage() {
                         bg: 'green.500',
                       }}
                     >
-                      Create  new account
+                      Create new account
                     </Button>
                   </Stack>
                 </Stack>
