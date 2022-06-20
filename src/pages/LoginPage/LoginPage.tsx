@@ -15,6 +15,8 @@ import FormInput from 'src/components/form-fields/FormInput'
 import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
 import { useState } from "react";
+import { ViewIcon } from '@chakra-ui/icons'
+import './login.css'
 
 
 export default function LoginPage() {
@@ -38,6 +40,7 @@ export default function LoginPage() {
     setPasswordShown(!passwordShown);
   };
 
+  
 
   return (
     <Formik
@@ -79,8 +82,9 @@ export default function LoginPage() {
                     label='Password'
                     placeholder='Password'                    
                     type={passwordShown ? "password" : "text"}
-                    onClick={togglePassword}
+                   
                   />
+                  <ViewIcon  onClick={togglePassword} className='icon' />
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
@@ -98,15 +102,14 @@ export default function LoginPage() {
                     >
                       Sign In
                     </Button>
-                    <Button
-                      bg='green.400'
-                      color='white'
-                      _hover={{
-                        bg: 'green.500',
-                      }}
-                    >
-                      Create new account
-                    </Button>
+                    <Stack pt={6}>
+                    <Text align='center'>
+                      New Account?
+                      <Link ml='2' href='/register' color='blue.400'>
+                        Register
+                      </Link>
+                    </Text>
+                  </Stack>
                   </Stack>
                 </Stack>
               </Box>

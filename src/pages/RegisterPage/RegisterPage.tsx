@@ -1,12 +1,7 @@
 import {
   Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
   HStack,
-  InputRightElement,
   Stack,
   Button,
   Heading,
@@ -15,18 +10,47 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { ViewIcon } from '@chakra-ui/icons'
 import FormInput from 'src/components/form-fields/FormInput'
 import { Form, Formik } from 'formik'
+import Register from 'src/interfaces/register.interface'
+import * as Yup from 'yup'
+import './register.css'
 
 function RegistePage() {
-  const [showPassword, setShowPassword] = useState(false)
+  const registerSchema: Yup.SchemaOf<Register> = Yup.object({
+    firstname: Yup.string().required(),
+    lastname: Yup.string().required(),
+    // use regex for email validation
+    // TODO servet
+    email: Yup.string().email().required(),
+    // Bir buyuk harf bir sembol(en az) ve en az 6 karakter
+    // validationda bu hatayi goster
+    password: Yup.string()
+      .required('Password is mendatory')
+      .min(4, 'Password must be at 6 char long'),
+    confirmPassword: Yup.string()
+      .required('Password is mendatory')
+      .oneOf([Yup.ref('password')], 'Passwords does not match'),
+  }).defined()
+  
+  const submitHandler = (input: Register) => {
+    // backend baglaninca
+    // eslint-disable-next-line no-unused-vars
+    const randomData = input
+  }
+
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+
 
   return (
     <Formik
-      initialValues={{}}
-      validationSchema={{}}
-      onSubmit={() => alert('submit')}
+      initialValues={ new Register() }
+      onSubmit={ (values) => submitHandler(values) }
+      validationSchema={ registerSchema }
     >
       {() => (
         <Form>
@@ -54,55 +78,22 @@ function RegistePage() {
                 <Stack spacing={4}>
                   <HStack>
                     <Box>
-                      <FormInput
-                        label='First Name'
-                        name='firstName'
-                        isRequired
-                      />
+                      <FormInput label='First Name' name='firstName' isRequired />
                     </Box>
                     <Box>
                       <FormInput label='Last Name' name='lastName' isRequired />
                     </Box>
                   </HStack>
-                  <FormControl id='email' isRequired>
-                    {/* use FormInput component in these fields like email password 
-                    confirmPassword like we used for userName and
-                    firstName fields */}
-                    <FormLabel>Email address</FormLabel>
-                    <Input type='email' />
-                  </FormControl>
-                  <FormControl id='password' isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <InputGroup>
-                      <Input type={showPassword ? 'text' : 'password'} />
-                      <InputRightElement h='full'>
-                        <Button
-                          variant='ghost'
-                          onClick={() =>
-                            setShowPassword((showPassword) => !showPassword)
-                          }
-                        >
-                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
-                  </FormControl>
-                  <FormControl id='password' isRequired>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <InputGroup>
-                      <Input type={showPassword ? 'text' : 'password'} />
-                      <InputRightElement h='full'>
-                        <Button
-                          variant='ghost'
-                          onClick={() =>
-                            setShowPassword((showPassword) => !showPassword)
-                          }
-                        >
-                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
-                  </FormControl>
+                  <Box>
+                      <FormInput label='Email' name='email' isRequired />
+                    </Box>
+                    <Box>
+                    <FormInput label='Password' name='password' isRequired />
+                  </Box>
+                  <ViewIcon  onClick={togglePassword} className='icon' />
+                    <Box>
+                      <FormInput label='ConfirmPassword' name='confirmPassword' isRequired />
+                    </Box>
                   <Stack spacing={10} pt={2}>
                     <Button
                       loadingText='Submitting'
@@ -119,7 +110,7 @@ function RegistePage() {
                   <Stack pt={6}>
                     <Text align='center'>
                       Already a user?
-                      <Link ml='2' href='/Login' color='blue.400'>
+                      <Link ml='2' href='/' color='blue.400'>
                         Login
                       </Link>
                     </Text>
