@@ -6,7 +6,7 @@ import {
   FormErrorMessage,
   FormLabel,
 } from '@chakra-ui/form-control'
-import { Input, InputGroup } from '@chakra-ui/input'
+import { Input, InputGroup, InputRightElement } from '@chakra-ui/input'
 import { Text, Textarea } from '@chakra-ui/react'
 import { useField } from 'formik'
 import React, { ChangeEvent, PropsWithChildren, ReactElement } from 'react'
@@ -20,6 +20,7 @@ type FormInputProps = {
   innerRef?: React.RefObject<HTMLInputElement | HTMLTextAreaElement>
   customErrorMessage?: boolean
   inputType?: 'input' | 'textarea'
+  rightElement?: React.ReactNode
 }
 
 function FormInput(
@@ -38,6 +39,7 @@ function FormInput(
     isReadOnly,
     isRequired,
     extraInfo,
+    rightElement,
     ...otherProps
   } = props
 
@@ -90,6 +92,7 @@ function FormInput(
             id={field.name}
           />
         )}
+        {rightElement && <InputRightElement>{rightElement}</InputRightElement>}
       </InputGroup>
 
       {extraInfo && (
