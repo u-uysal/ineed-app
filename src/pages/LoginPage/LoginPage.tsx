@@ -14,6 +14,10 @@ import { Form, Formik } from 'formik'
 import FormInput from 'src/components/form-fields/FormInput'
 import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
+import { useState } from "react";
+import { ViewIcon } from '@chakra-ui/icons'
+import './login.css'
+
 
 export default function LoginPage() {
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
@@ -30,6 +34,13 @@ export default function LoginPage() {
     // eslint-disable-next-line no-unused-vars
     const randomData = input
   }
+
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+
+  
 
   return (
     <Formik
@@ -69,11 +80,11 @@ export default function LoginPage() {
                   <FormInput
                     name='password'
                     label='Password'
-                    placeholder='Password'
-                    // show password
-                    // TODO SERVET
-                    type='password'
+                    placeholder='Password'                    
+                    type={passwordShown ? "password" : "text"}
+                   
                   />
+                  <ViewIcon  onClick={togglePassword} className='icon' />
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
@@ -91,12 +102,14 @@ export default function LoginPage() {
                     >
                       Sign In
                     </Button>
-                    {/* TODO
-                    
-                    Eger kullanicinin hic hesabi yoksa register page'e yonlendir.
-                    
-                    
-                    */}
+                    <Stack pt={6}>
+                    <Text align='center'>
+                      New Account?
+                      <Link ml='2' href='/register' color='blue.400'>
+                        Register
+                      </Link>
+                    </Text>
+                  </Stack>
                   </Stack>
                 </Stack>
               </Box>
