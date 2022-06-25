@@ -15,30 +15,48 @@ import FormInput from 'src/components/form-fields/FormInput'
 import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
 import { useState } from "react";
-import { ViewIcon } from '@chakra-ui/icons'
 import './login.css'
 
-
 export default function LoginPage() {
+
+
+
+// ******************************************************
+// 01. REGEX FOR EMAIL VALIDATION => CONTINUES <=
+// *****************************************************
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
-    // use regex for email validation
-    // TODO servet
+// use regex for email validation
+// TODO servet
     email: Yup.string().email().required(),
-    // Bir buyuk harf bir sembol(en az) ve en az 6 karakter
-    // validationda bu hatayi goster
+// Bir buyuk harf bir sembol(en az) ve en az 6 karakter
+// validationda bu hatayi goster
     password: Yup.string().required(),
   }).defined()
+// *****************************************************
 
+
+
+// *****************************************************
+// 02. BACKEND BAGLANINCA => CONTINUES <=
+// *****************************************************
   const submitHandler = (input: Login) => {
     // backend baglaninca
     // eslint-disable-next-line no-unused-vars
     const randomData = input
   }
+// *****************************************************
 
-  const [passwordShown, setPasswordShown] = useState(false);
-  const togglePassword = () => {
-    setPasswordShown(!passwordShown);
-  };
+
+
+// *****************************************************
+// 03. SHOW PASSWORD FEATURE => COMPLETED <=
+// *****************************************************
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowClick = () => {
+    setShowPassword(!showPassword);
+  }
+// *****************************************************
+
 
   
 
@@ -80,11 +98,12 @@ export default function LoginPage() {
                   <FormInput
                     name='password'
                     label='Password'
-                    placeholder='Password'                    
-                    type={passwordShown ? "password" : "text"}
-                   
+                    placeholder='Password'   
+                    type={showPassword ? "text" : "password"}                   
                   />
-                  <ViewIcon  onClick={togglePassword} className='icon' />
+                  <Button h="1.75rem" size="sm" onClick={handleShowClick}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Button>
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
@@ -104,9 +123,9 @@ export default function LoginPage() {
                     </Button>
                     <Stack pt={6}>
                     <Text align='center'>
-                      New Account?
+                        Don’t have an account?
                       <Link ml='2' href='/register' color='blue.400'>
-                        Register
+                        Sign up
                       </Link>
                     </Text>
                   </Stack>
