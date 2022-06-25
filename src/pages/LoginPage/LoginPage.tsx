@@ -15,57 +15,66 @@ import { Form, Formik } from 'formik'
 import FormInput from 'src/components/form-fields/FormInput'
 import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
-import { useState } from "react";
+import { useState } from 'react'
 import './login.css'
-import isEmailValidator from 'validator/lib/isEmail';
+import isEmailValidator from 'validator/lib/isEmail'
 
 export default function LoginPage() {
 
-// ******************************************************
-// 01. EMAIL/PASSWORD VALIDATION => CONTINUES <=
-// *****************************************************
+
+
+  // ******************************************************
+  // 01. EMAIL/PASSWORD VALIDATION => COMPLETED <=
+  // *****************************************************
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
-    email: Yup.string().email().required().test("is-valid", (message) => `${message.path} is invalid`, (value) => value ? isEmailValidator(value) : new Yup.ValidationError("Invalid value")),
-// Bir buyuk harf bir sembol(en az) ve en az 6 karakter
-    password: Yup.string().required(),
+    email: Yup.string()
+      .email()
+      .required()
+      .test(
+        'is-valid',
+        (message) => `${message.path} is invalid`,
+        (value) =>
+          value
+            ? isEmailValidator(value)
+            : new Yup.ValidationError('Invalid value')
+      ),
+    password: Yup.string()
+      .required('No password provided.')
+      .min(8, 'Password is too short - should be 8 chars minimum.')
+      .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
   }).defined()
-// *****************************************************
 
 
 
-// *****************************************************
-// 02. BACKEND BAGLANINCA => CONTINUES <=
-// *****************************************************
+  // *****************************************************
+  // 02. BACKEND BAGLANINCA => CONTINUES <=
+  // *****************************************************
   const submitHandler = (input: Login) => {
     // backend baglaninca
     // eslint-disable-next-line no-unused-vars
     const randomData = input
   }
-// *****************************************************
 
 
 
-// *****************************************************
-// 03. SHOW PASSWORD FEATURE => COMPLETED <=
-// *****************************************************
-  const [showPassword, setShowPassword] = useState(false);
+  // *****************************************************
+  // 03. SHOW PASSWORD FEATURE => COMPLETED <=
+  // *****************************************************
+  const [showPassword, setShowPassword] = useState(false)
   const handleShowClick = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(!showPassword)
   }
-// *****************************************************
 
 
 
-// *****************************************************
-// 03. TOAST => COMPLETED <=
-// *****************************************************
+  // *****************************************************
+  // 03. TOAST => COMPLETED <=
+  // *****************************************************
   const toast = useToast()
-// *****************************************************
 
 
 
-
-
+  
   return (
     <Formik
       initialValues={new Login()}
@@ -104,11 +113,11 @@ export default function LoginPage() {
                   <FormInput
                     name='password'
                     label='Password'
-                    placeholder='Password'   
-                    type={showPassword ? "text" : "password"}                   
+                    placeholder='Password'
+                    type={showPassword ? 'text' : 'password'}
                   />
-                  <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                    {showPassword ? "Hide" : "Show"}
+                  <Button h='1.75rem' size='sm' onClick={handleShowClick}>
+                    {showPassword ? 'Hide' : 'Show'}
                   </Button>
                   <Stack spacing={10}>
                     <Stack
@@ -118,15 +127,16 @@ export default function LoginPage() {
                     >
                       <Link color='blue.400'>Forgot password?</Link>
                     </Stack>
-                    <Button onClick={() =>
-                      toast({
-                        title: 'Login successful.',
-                        description: "We've prepared your account for you.",
-                        status: 'success',
-                        duration: 9000,
-                        isClosable: true,
-                      })
-                    }
+                    <Button
+                      onClick={() =>
+                        toast({
+                          title: 'Login successful.',
+                          description: "We've prepared your account for you.",
+                          status: 'success',
+                          duration: 9000,
+                          isClosable: true,
+                        })
+                      }
                       bg='blue.400'
                       color='white'
                       _hover={{
@@ -136,13 +146,13 @@ export default function LoginPage() {
                       Sign In
                     </Button>
                     <Stack pt={6}>
-                    <Text align='center'>
+                      <Text align='center'>
                         Don’t have an account?
-                      <Link ml='2' href='/register' color='blue.400'>
-                        Sign up
-                      </Link>
-                    </Text>
-                  </Stack>
+                        <Link ml='2' href='/register' color='blue.400'>
+                          Sign up
+                        </Link>
+                      </Text>
+                    </Stack>
                   </Stack>
                 </Stack>
               </Box>
