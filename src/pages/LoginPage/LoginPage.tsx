@@ -9,6 +9,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import FormInput from 'src/components/form-fields/FormInput'
@@ -18,8 +19,6 @@ import { useState } from "react";
 import './login.css'
 
 export default function LoginPage() {
-
-
 
 // ******************************************************
 // 01. REGEX FOR EMAIL VALIDATION => CONTINUES <=
@@ -58,7 +57,16 @@ export default function LoginPage() {
 // *****************************************************
 
 
-  
+
+// *****************************************************
+// 03. TOAST => COMPLETED <=
+// *****************************************************
+  const toast = useToast()
+// *****************************************************
+
+
+
+
 
   return (
     <Formik
@@ -112,7 +120,15 @@ export default function LoginPage() {
                     >
                       <Link color='blue.400'>Forgot password?</Link>
                     </Stack>
-                    <Button
+                    <Button onClick={() =>
+                      toast({
+                        title: 'Login successful.',
+                        description: "We've prepared your account for you.",
+                        status: 'success',
+                        duration: 9000,
+                        isClosable: true,
+                      })
+                    }
                       bg='blue.400'
                       color='white'
                       _hover={{
