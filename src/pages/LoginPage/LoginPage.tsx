@@ -17,18 +17,16 @@ import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
 import { useState } from "react";
 import './login.css'
+import isEmailValidator from 'validator/lib/isEmail';
 
 export default function LoginPage() {
 
 // ******************************************************
-// 01. REGEX FOR EMAIL VALIDATION => CONTINUES <=
+// 01. EMAIL/PASSWORD VALIDATION => CONTINUES <=
 // *****************************************************
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
-// use regex for email validation
-// TODO servet
-    email: Yup.string().email().required(),
+    email: Yup.string().email().required().test("is-valid", (message) => `${message.path} is invalid`, (value) => value ? isEmailValidator(value) : new Yup.ValidationError("Invalid value")),
 // Bir buyuk harf bir sembol(en az) ve en az 6 karakter
-// validationda bu hatayi goster
     password: Yup.string().required(),
   }).defined()
 // *****************************************************
