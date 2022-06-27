@@ -1,6 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/require-default-props */
-/* eslint-disable react/jsx-props-no-spreading */
 import {
   FormControl,
   FormErrorMessage,
@@ -103,6 +100,7 @@ function FormInput(
 
       <FormErrorMessage>
         {error !== undefined &&
+          // eslint-disable-next-line no-nested-ternary
           (customErrorMessage ? error : typeof error === 'string' ? error : '')}
       </FormErrorMessage>
     </FormControl>

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import {
   Flex,
   Box,
@@ -17,34 +15,26 @@ import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
 import { useState } from 'react'
 import './login.css'
-import isEmailValidator from 'validator/lib/isEmail'
+import EyeDisabledIcon from 'src/ui/icons/EyeDisabledIcon'
+import EyeIcon from 'src/ui/icons/EyeIcon'
+import YupPassword from 'yup-password'
 
-export default function LoginPage() {
+YupPassword(Yup) // extend yup
 
+function LoginPage() {
+  const toast = useToast()
+  const [showPassword, setShowPassword] = useState(false)
 
-
-  // ******************************************************
-  // 01. EMAIL/PASSWORD VALIDATION => COMPLETED <=
-  // *****************************************************
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
-    email: Yup.string()
-      .email()
-      .required()
-      .test(
-        'is-valid',
-        (message) => `${message.path} is invalid`,
-        (value) =>
-          value
-            ? isEmailValidator(value)
-            : new Yup.ValidationError('Invalid value')
-      ),
+    email: Yup.string().email().required(),
     password: Yup.string()
       .required('No password provided.')
       .min(8, 'Password is too short - should be 8 chars minimum.')
-      .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+      .minLowercase(1, 'password must contain at least 1 lower case letter')
+      .minUppercase(1, 'password must contain at least 1 upper case letter')
+      .minNumbers(1, 'password must contain at least 1 number')
+      .minSymbols(1, 'password must contain at least 1 special character'),
   }).defined()
-
-
 
   // *****************************************************
   // 02. BACKEND BAGLANINCA => CONTINUES <=
@@ -55,34 +45,15 @@ export default function LoginPage() {
     const randomData = input
   }
 
-
-
-  // *****************************************************
-  // 03. SHOW PASSWORD FEATURE => COMPLETED <=
-  // *****************************************************
-  const [showPassword, setShowPassword] = useState(false)
-  const handleShowClick = () => {
-    setShowPassword(!showPassword)
-  }
-
-
-
-  // *****************************************************
-  // 03. TOAST => COMPLETED <=
-  // *****************************************************
-  const toast = useToast()
-
-
-
-  
   return (
     <Formik
       initialValues={new Login()}
       // TODO onsubmit icin UseMutation Hookunu kullan (en son)
       onSubmit={(values) => submitHandler(values)}
       validationSchema={loginSchema}
+      enableReinitialize
     >
-      {() => (
+      {({ isSubmitting, isValid, dirty }) => (
         <Form>
           <Flex
             minH='100vh'
@@ -94,8 +65,7 @@ export default function LoginPage() {
               <Stack align='center'>
                 <Heading fontSize='4xl'>Sign in to your account</Heading>
                 <Text fontSize='lg' color='gray.600'>
-                  to enjoy all of our cool{' '}
-                  <Link color='blue.400'>features</Link> ✌️
+                  to enjoy all of our cool features ✌️
                 </Text>
               </Stack>
               <Box
@@ -106,28 +76,39 @@ export default function LoginPage() {
               >
                 <Stack spacing={4}>
                   <FormInput
-                    name='email'
+                    name='Email'
                     label='Email'
                     placeholder='Your email adress'
                   />
                   <FormInput
-                    name='password'
+                    name='Password'
                     label='Password'
                     placeholder='Password'
                     type={showPassword ? 'text' : 'password'}
+                    rightElement={
+                      <Button
+                        size='sm'
+                        variant='ghost'
+                        _focus={{ boxShadow: 'none' }}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeDisabledIcon /> : <EyeIcon />}
+                      </Button>
+                    }
                   />
-                  <Button h='1.75rem' size='sm' onClick={handleShowClick}>
-                    {showPassword ? 'Hide' : 'Show'}
-                  </Button>
+
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
                       align='start'
                       justify='space-between'
                     >
-                      <Link color='blue.400'>Forgot password?</Link>
+                      <Link href='Todo' color='blue.400'>
+                        Forgot password?
+                      </Link>
                     </Stack>
                     <Button
+                      disabled={!(isValid && dirty) || isSubmitting}
                       onClick={() =>
                         toast({
                           title: 'Login successful.',
@@ -143,7 +124,9 @@ export default function LoginPage() {
                         bg: 'blue.500',
                       }}
                     >
-                      Sign In
+                      {!(isValid && dirty)
+                        ? 'Check your credentials'
+                        : 'Sign In'}
                     </Button>
                     <Stack pt={6}>
                       <Text align='center'>
@@ -163,3 +146,4 @@ export default function LoginPage() {
     </Formik>
   )
 }
+export default LoginPage
