@@ -26,7 +26,9 @@ export default function LoginPage() {
     email: Yup.string().email().required(),
     // Bir buyuk harf bir sembol(en az) ve en az 6 karakter
     // validationda bu hatayi goster
-    password: Yup.string().required(),
+    password: Yup.string()
+      .required('Password is mendatory')
+      .min(6, 'Password must be at 6 char long'),
   }).defined()
 
   const submitHandler = (input: Login) => {
@@ -35,7 +37,7 @@ export default function LoginPage() {
     const randomData = input
   }
 
-  const [passwordShown, setPasswordShown] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(true);
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
@@ -46,10 +48,16 @@ export default function LoginPage() {
     <Formik
       initialValues={new Login()}
       // TODO onsubmit icin UseMutation Hookunu kullan (en son)
-      onSubmit={(values) => submitHandler(values)}
-      validationSchema={loginSchema}
+      onSubmit={(values, { resetForm }) => {
+        submitHandler(values)
+        setTimeout(() => {
+          resetForm();
+        }, 2000);
+      }
+}
+     validationSchema={loginSchema}
     >
-      {() => (
+      {({ handleChange, dirty, isSubmitting }) => (
         <Form>
           <Flex
             minH='100vh'
@@ -76,13 +84,14 @@ export default function LoginPage() {
                     name='email'
                     label='Email'
                     placeholder='Your email adress'
+                    onChange={handleChange}
                   />
                   <FormInput
                     name='password'
                     label='Password'
                     placeholder='Password'                    
                     type={passwordShown ? "password" : "text"}
-                   
+                   onChange={handleChange}
                   />
                   <ViewIcon  onClick={togglePassword} className='icon' />
                   <Stack spacing={10}>
@@ -94,11 +103,13 @@ export default function LoginPage() {
                       <Link color='blue.400'>Forgot password?</Link>
                     </Stack>
                     <Button
+                      type='submit'
                       bg='blue.400'
                       color='white'
                       _hover={{
                         bg: 'blue.500',
                       }}
+                      disabled= { !dirty || isSubmitting }
                     >
                       Sign In
                     </Button>

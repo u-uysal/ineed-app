@@ -1,7 +1,7 @@
 const webRoutes = {
-  homepage: '/home',
+  homepage: '/',
   register: '/register',
-  login: '/',
+  login: '/login',
 
 }
 export default webRoutes
