@@ -1,12 +1,12 @@
-export class Register {
-    firstname = ''
+export class RegisterInput {
+  firstname = ''
 
-    lastname = ''
+  lastname = ''
 
-    email = ''
-  
-    password = ''
+  email = ''
 
-    confirmPassword = ''
-  }
-  export default Register
+  password = ''
+
+  confirmPassword = ''
+}
+export default RegisterInput

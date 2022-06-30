@@ -38,6 +38,8 @@
         "extensions": [".tsx"]
       }
     ],
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
     "react/no-danger": "off", // it's self explainatory that no-danger should be used sparingly
     "react/react-in-jsx-scope": "off", // next.js does not require react in most components
     "react/prop-types": 0, // as long as TS strict mode is off this is not required

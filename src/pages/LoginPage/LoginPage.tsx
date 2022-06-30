@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import {
   Flex,
   Box,
@@ -9,55 +7,52 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import FormInput from 'src/components/form-fields/FormInput'
 import Login from 'src/interfaces/login.interface'
 import * as Yup from 'yup'
-import { useState } from "react";
-import { ViewIcon } from '@chakra-ui/icons'
-import './login.css'
+import { useState } from 'react'
+import EyeDisabledIcon from 'src/ui/icons/EyeDisabledIcon'
+import EyeIcon from 'src/ui/icons/EyeIcon'
+import YupPassword from 'yup-password'
 
+YupPassword(Yup) // extend yup
 
-export default function LoginPage() {
+function LoginPage() {
+  const toast = useToast()
+  const [showPassword, setShowPassword] = useState(false)
+
   const loginSchema: Yup.SchemaOf<Login> = Yup.object({
-    // use regex for email validation
-    // TODO servet
     email: Yup.string().email().required(),
-    // Bir buyuk harf bir sembol(en az) ve en az 6 karakter
-    // validationda bu hatayi goster
     password: Yup.string()
-      .required('Password is mendatory')
-      .min(6, 'Password must be at 6 char long'),
+      .required('No password provided.')
+      .min(8, 'Password is too short - should be 8 chars minimum.')
+      .minLowercase(1, 'password must contain at least 1 lower case letter')
+      .minUppercase(1, 'password must contain at least 1 upper case letter')
+      .minNumbers(1, 'password must contain at least 1 number')
+      .minSymbols(1, 'password must contain at least 1 special character'),
   }).defined()
 
+  // *****************************************************
+  // 02. BACKEND BAGLANINCA => CONTINUES <=
+  // *****************************************************
   const submitHandler = (input: Login) => {
     // backend baglaninca
     // eslint-disable-next-line no-unused-vars
     const randomData = input
   }
 
-  const [passwordShown, setPasswordShown] = useState(true);
-  const togglePassword = () => {
-    setPasswordShown(!passwordShown);
-  };
-
-  
-
   return (
     <Formik
       initialValues={new Login()}
       // TODO onsubmit icin UseMutation Hookunu kullan (en son)
-      onSubmit={(values, { resetForm }) => {
-        submitHandler(values)
-        setTimeout(() => {
-          resetForm();
-        }, 2000);
-      }
-}
-     validationSchema={loginSchema}
+      onSubmit={(values) => submitHandler(values)}
+      validationSchema={loginSchema}
+      enableReinitialize
     >
-      {({ handleChange, dirty, isSubmitting }) => (
+      {({ isSubmitting, isValid, dirty }) => (
         <Form>
           <Flex
             minH='100vh'
@@ -69,8 +64,7 @@ export default function LoginPage() {
               <Stack align='center'>
                 <Heading fontSize='4xl'>Sign in to your account</Heading>
                 <Text fontSize='lg' color='gray.600'>
-                  to enjoy all of our cool{' '}
-                  <Link color='blue.400'>features</Link> ✌️
+                  to enjoy all of our cool features ✌️
                 </Text>
               </Stack>
               <Box
@@ -81,46 +75,66 @@ export default function LoginPage() {
               >
                 <Stack spacing={4}>
                   <FormInput
-                    name='email'
+                    name='Email'
                     label='Email'
                     placeholder='Your email adress'
-                    onChange={handleChange}
                   />
                   <FormInput
-                    name='password'
+                    name='Password'
                     label='Password'
-                    placeholder='Password'                    
-                    type={passwordShown ? "password" : "text"}
-                   onChange={handleChange}
+                    placeholder='Password'
+                    type={showPassword ? 'text' : 'password'}
+                    rightElement={
+                      <Button
+                        size='sm'
+                        variant='ghost'
+                        _focus={{ boxShadow: 'none' }}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeDisabledIcon /> : <EyeIcon />}
+                      </Button>
+                    }
                   />
-                  <ViewIcon  onClick={togglePassword} className='icon' />
+
                   <Stack spacing={10}>
                     <Stack
                       direction={{ base: 'column', sm: 'row' }}
                       align='start'
                       justify='space-between'
                     >
-                      <Link color='blue.400'>Forgot password?</Link>
+                      <Link href='Todo' color='blue.400'>
+                        Forgot password?
+                      </Link>
                     </Stack>
                     <Button
-                      type='submit'
+                      disabled={!(isValid && dirty) || isSubmitting}
+                      onClick={() =>
+                        toast({
+                          title: 'Login successful.',
+                          description: "We've prepared your account for you.",
+                          status: 'success',
+                          duration: 9000,
+                          isClosable: true,
+                        })
+                      }
                       bg='blue.400'
                       color='white'
                       _hover={{
                         bg: 'blue.500',
                       }}
-                      disabled= { !dirty || isSubmitting }
                     >
-                      Sign In
+                      {!(isValid && dirty)
+                        ? 'Check your credentials'
+                        : 'Sign In'}
                     </Button>
                     <Stack pt={6}>
-                    <Text align='center'>
-                      New Account?
-                      <Link ml='2' href='/register' color='blue.400'>
-                        Register
-                      </Link>
-                    </Text>
-                  </Stack>
+                      <Text align='center'>
+                        Don’t have an account?
+                        <Link ml='2' href='/register' color='blue.400'>
+                          Sign up
+                        </Link>
+                      </Text>
+                    </Stack>
                   </Stack>
                 </Stack>
               </Box>
@@ -131,3 +145,4 @@ export default function LoginPage() {
     </Formik>
   )
 }
+export default LoginPage
