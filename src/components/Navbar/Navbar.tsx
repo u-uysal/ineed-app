@@ -2,35 +2,41 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-no-useless-fragment */
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from './Button';
-import './Navbar.css';
-import Dropdown from './Dropdown';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Button } from './Button'
+import Dropdown from './Dropdown'
 
 function Navbar() {
-  const [click, setClick] = useState(false);
-  const [dropdown, setDropdown] = useState(false);
+  const [click, setClick] = useState(false)
+  const [dropdown, setDropdown] = useState(false)
 
-  const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
+  const handleClick = () => setClick(!click)
+  const closeMobileMenu = () => setClick(false)
 
   const onMouseEnter = () => {
     if (window.innerWidth < 960) {
-      setDropdown(false);
+      setDropdown(false)
     } else {
-      setDropdown(true);
+      setDropdown(true)
     }
-  };
+  }
 
   const onMouseLeave = () => {
     if (window.innerWidth < 960) {
-      setDropdown(false);
+      setDropdown(false)
     } else {
-      setDropdown(false);
+      setDropdown(false)
     }
-  };
+  }
 
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services' },
+    { name: 'Products', path: '/Products' },
+    { name: 'Contact Us', path: '/Contact' },
+    { name: 'Sign Up', path: '/register' },
+  ]
   return (
     <>
       <nav className='navbar'>
@@ -42,57 +48,27 @@ function Navbar() {
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
         </div>
         <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-          <li className='nav-item'>
-            <Link to='/' className='nav-links' onClick={closeMobileMenu}>
-              Home
-            </Link>
-          </li>
-          <li
-            className='nav-item'
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-          >
-            <Link
-              to='/services'
-              className='nav-links'
-              onClick={closeMobileMenu}
+          {navItems.map((item) => (
+            <li
+              className='nav-item'
+              onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
             >
-              Services <i className='fas fa-caret-down' />
-            </Link>
-            {dropdown && <Dropdown />}
-          </li>
-          <li className='nav-item'>
-            <Link
-              to='/products'
-              className='nav-links'
-              onClick={closeMobileMenu}
-            >
-              Products
-            </Link>
-          </li>
-          <li className='nav-item'>
-            <Link
-              to='/contact-us'
-              className='nav-links'
-              onClick={closeMobileMenu}
-            >
-              Contact Us
-            </Link>
-          </li>
-          <li>
-            <Link
-              to='/register'
-              className='nav-links-mobile'
-              onClick={closeMobileMenu}
-            >
-              Sign Up
-            </Link>
-          </li>
+              <Link
+                to={item.path}
+                className='nav-links'
+                onClick={closeMobileMenu}
+              >
+                {item.name} <i className='fas fa-caret-down' />
+              </Link>
+              { item.name === "Products" && dropdown && <Dropdown />}
+            </li>
+          ))}
         </ul>
         <Button />
       </nav>
     </>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar

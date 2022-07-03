@@ -1,0 +1,21 @@
+@import '../variables.scss';
+
+.btn {
+	padding: 8px 20px;
+	border-radius: 4px;
+	outline: none;
+	border: none;
+	font-size: 18px;
+	color: $color_white;
+	cursor: pointer;
+	background-color: $primary_color;
+	&:hover {
+		padding: 6px 18px;
+		transition: all 0.3s ease-out;
+		background-color: transparent;
+		color: $color_white;
+		border-radius: 4px;
+		border: 2px solid $primary_color;
+		transition: all 0.3s ease-out;
+	}
+}
