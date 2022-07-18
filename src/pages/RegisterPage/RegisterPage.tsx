@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-// todo
 import {
   Flex,
   Box,
@@ -20,28 +18,23 @@ import RegisterInput from 'src/interfaces/register.interface'
 import EyeDisabledIcon from 'src/ui/icons/EyeDisabledIcon'
 import EyeIcon from 'src/ui/icons/EyeIcon'
 import { useMutation } from '@apollo/client'
+import { RegisterResponse } from 'src/types/register.interface'
 import REGISTER from 'src/mutations/register'
 
 function RegistePage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const [register, { data, loading, error }] = useMutation(REGISTER)
+  // use data loading and error
+  const [register] = useMutation<RegisterResponse>(REGISTER)
 
-  const emailAdresses = [
-    'Duranakyol71@gmail.com',
-    'Test2@gmail.com',
-    'Test3@gmail.com',
-  ]
+  // const [register, { data, loading, error }] =
+  // useMutation<RegisterResponse>(REGISTER)
 
   const registerSchema: Yup.SchemaOf<RegisterInput> = Yup.object({
     firstname: Yup.string().required(),
     lastname: Yup.string().required(),
-    email: Yup.string()
-      .email()
-      .lowercase()
-      .notOneOf(emailAdresses, 'Email already taken!')
-      .required(),
+    email: Yup.string().email().lowercase().required(),
     password: Yup.string()
       .required('No password provided.')
       .min(8, 'Password is too short - should be 8 chars minimum.')
@@ -54,10 +47,9 @@ function RegistePage() {
       .oneOf([Yup.ref('password')], 'Passwords does not match'),
   }).defined()
 
-  const submitHandler = (input: RegisterInput) => {
-    const { firstname, lastname, password, confirmPassword, email } = input
-    // backend baglaninca
-    // eslint-disable-next-line no-unused-vars
+  const submitHandler = (values: RegisterInput) => {
+    const { firstname, lastname, password, confirmPassword, email } = values
+
     register({
       variables: {
         firstname,
@@ -80,16 +72,13 @@ function RegistePage() {
       draggable: true,
       progress: undefined,
     })
-
-  // önce ise add-to-do.jsx ekleyerek baslayacaz sonra icini doldurarak anladigim kadariyla usemutation hook yapacaz. ardindan da
-  // buradan gönderilen formlari oraya kaydedecez.
   return (
     <Formik
       initialValues={new RegisterInput()}
       validationSchema={registerSchema}
       onSubmit={(values) => submitHandler(values)}
     >
-      {({ isValid, dirty, isSubmitting }) => (
+      {({ isValid, isSubmitting }) => (
         <Form>
           <Flex
             minH='100vh'
