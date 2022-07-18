@@ -15,7 +15,7 @@ import App from './App'
 // Browser Router (React Router) /register
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
+  uri: 'http://localhost:8000/',
   cache: new InMemoryCache(),
 })
 
