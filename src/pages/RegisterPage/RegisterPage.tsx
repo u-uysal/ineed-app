@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-curly-brace-presence */
+/* eslint-disable no-console */
 import {
   Flex,
   Box,
@@ -20,16 +22,21 @@ import EyeIcon from 'src/ui/icons/EyeIcon'
 import { useMutation } from '@apollo/client'
 import { RegisterResponse } from 'src/types/register.interface'
 import REGISTER from 'src/mutations/register'
+import { useNavigate } from 'react-router-dom'
 
 function RegistePage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  // use data loading and error
-  const [register] = useMutation<RegisterResponse>(REGISTER)
+  const navigate = useNavigate()
 
-  // const [register, { data, loading, error }] =
-  // useMutation<RegisterResponse>(REGISTER)
+  // use data loading and error
+
+  const [register, { data, loading, error }] =
+    useMutation<RegisterResponse>(REGISTER)
+
+  console.log(loading)
+  console.log(data)
 
   const registerSchema: Yup.SchemaOf<RegisterInput> = Yup.object({
     firstname: Yup.string().required(),
@@ -62,7 +69,18 @@ function RegistePage() {
   }
 
   const notify = () =>
-    toast.success('Registration successfully sent! ', {
+    toast.warn('This user is already exists!', {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+
+  const successToast = () => {
+    toast.success('Registration successfly sent!', {
       icon: '🚀',
       position: 'top-right',
       autoClose: 3000,
@@ -72,11 +90,25 @@ function RegistePage() {
       draggable: true,
       progress: undefined,
     })
+  }
+
   return (
     <Formik
       initialValues={new RegisterInput()}
       validationSchema={registerSchema}
-      onSubmit={(values) => submitHandler(values)}
+      onSubmit={(values, { resetForm }) => {
+        submitHandler(values)
+        if (error) {
+          setTimeout(() => {
+            navigate('/login')
+          }, 4000)
+        } else {
+          setTimeout(() => {
+            navigate('/register')
+            resetForm()
+          }, 4000)
+        }
+      }}
     >
       {({ isValid, isSubmitting }) => (
         <Form>
@@ -178,10 +210,11 @@ function RegistePage() {
                       _hover={{
                         bg: 'blue.500',
                       }}
-                      onClick={notify}
+                      onClick={error ? successToast : notify}
                     >
-                      Sign Up
+                      Sign up
                     </Button>
+
                     <ToastContainer
                       position='top-right'
                       autoClose={3000}

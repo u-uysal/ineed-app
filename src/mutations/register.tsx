@@ -16,6 +16,7 @@ const REGISTER = gql`
       email: $email
     ) {
       id
+      email
     }
   }
 `
