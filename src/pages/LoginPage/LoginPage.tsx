@@ -17,10 +17,14 @@ import { useState } from 'react'
 import EyeDisabledIcon from 'src/ui/icons/EyeDisabledIcon'
 import EyeIcon from 'src/ui/icons/EyeIcon'
 import YupPassword from 'yup-password'
+import { useMutation } from '@apollo/client'
+import { LoginResponse } from 'src/types/login.interface'
+import LOGIN from 'src/mutations/login'
 
 YupPassword(Yup) // extend yup
 
 function LoginPage() {
+  
   const toast = useToast()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -35,13 +39,15 @@ function LoginPage() {
       .minSymbols(1, 'password must contain at least 1 special character'),
   }).defined()
 
-  // *****************************************************
-  // 02. BACKEND BAGLANINCA => CONTINUES <=
-  // *****************************************************
-  const submitHandler = (input: Login) => {
-    // backend baglaninca
-    // eslint-disable-next-line no-unused-vars
-    const randomData = input
+  const [login] = useMutation<LoginResponse>(LOGIN)
+  const submitHandler = (values: Login) => {
+    const { email, password } = values
+    login({
+      variables: {
+        email,
+        password,
+      },
+    })
   }
 
   return (
