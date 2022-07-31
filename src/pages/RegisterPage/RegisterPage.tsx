@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-curly-brace-presence */
-/* eslint-disable no-console */
 import {
   Flex,
   Box,
@@ -9,13 +7,12 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import FormInput from 'src/components/form-fields/FormInput'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import RegisterInput from 'src/interfaces/register.interface'
 import EyeDisabledIcon from 'src/ui/icons/EyeDisabledIcon'
 import EyeIcon from 'src/ui/icons/EyeIcon'
@@ -23,20 +20,16 @@ import { useMutation } from '@apollo/client'
 import { RegisterResponse } from 'src/types/register.interface'
 import REGISTER from 'src/mutations/register'
 import { useNavigate } from 'react-router-dom'
+import clientSideMessages from 'src/utils/messages/messages'
+import defaultToastProps from 'src/utils/toast-default'
 
-function RegistePage() {
+function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
+  const toast = useToast()
   const navigate = useNavigate()
 
-  // use data loading and error
-
-  const [register, { data, loading, error }] =
-    useMutation<RegisterResponse>(REGISTER)
-
-  console.log(loading)
-  console.log(data)
+  const [register] = useMutation<RegisterResponse>(REGISTER)
 
   const registerSchema: Yup.SchemaOf<RegisterInput> = Yup.object({
     firstname: Yup.string().required(),
@@ -66,48 +59,28 @@ function RegistePage() {
         email,
       },
     })
+      .then(() => {
+        toast({
+          title: clientSideMessages.succesfullySaved,
+          status: 'success',
+          ...defaultToastProps,
+        })
+        navigate('/login')
+      })
+      .catch((err) => {
+        toast({
+          title: err.message,
+          status: 'error',
+          ...defaultToastProps,
+        })
+      })
   }
-
-  const notify = () =>
-    toast.warn('This user is already exists!', {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-
-  const successToast = () => {
-    toast.success('Registration successfly sent!', {
-      icon: '🚀',
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-  }
-
   return (
     <Formik
       initialValues={new RegisterInput()}
       validationSchema={registerSchema}
-      onSubmit={(values, { resetForm }) => {
+      onSubmit={(values) => {
         submitHandler(values)
-        if (error) {
-          setTimeout(() => {
-            navigate('/login')
-          }, 4000)
-        } else {
-          setTimeout(() => {
-            navigate('/register')
-            resetForm()
-          }, 4000)
-        }
       }}
     >
       {({ isValid, isSubmitting }) => (
@@ -210,22 +183,12 @@ function RegistePage() {
                       _hover={{
                         bg: 'blue.500',
                       }}
-                      onClick={error ? successToast : notify}
+                      onClick={() => {
+                        "console.log('clicked')"
+                      }}
                     >
                       Sign up
                     </Button>
-
-                    <ToastContainer
-                      position='top-right'
-                      autoClose={3000}
-                      hideProgressBar={false}
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                    />
                   </Stack>
                   <Stack pt={3}>
                     <Text align='center'>
@@ -244,4 +207,5 @@ function RegistePage() {
     </Formik>
   )
 }
-export default RegistePage
+
+export default RegisterPage
