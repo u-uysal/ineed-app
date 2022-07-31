@@ -183,9 +183,6 @@ function RegisterPage() {
                       _hover={{
                         bg: 'blue.500',
                       }}
-                      onClick={() => {
-                        "console.log('clicked')"
-                      }}
                     >
                       Sign up
                     </Button>
