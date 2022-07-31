@@ -43,7 +43,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "style:all": "tsc && npm run style:lint && npm run style:prettier",
-    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "style:lint": "eslint \"**/*.{ts,tsx}\"",
     "style:prettier": "prettier --check '**/*.{js,jsx,ts,tsx}'",
     "make-pretty": "prettier --write '**/*.{js,jsx,ts,tsx}'",
     "prepare": "husky install"
